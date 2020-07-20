@@ -4,12 +4,12 @@ import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker,
   WithScriptjsProps,
   WithGoogleMapProps,
 } from "react-google-maps";
 // config
 import { mapStyle, defaultCenter } from "./config";
+import getConfig from 'next/config'
 // views
 import { MapElement, Container } from "./views";
 
@@ -44,10 +44,11 @@ const GoogleMaps = withScriptjs<WithScriptjsProps & WithGoogleMapProps>(
 );
 
 const Map: React.FC = ({ children }) => {
+    const { publicRuntimeConfig } = getConfig()
   return (
     <Container>
       <GoogleMaps
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDqE6YceabLW1KKOegmzFeN3aanGY1p9h4`}
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${publicRuntimeConfig.GOOGLE_MAPS_API_KEY}`}
         loadingElement={<MapElement />}
         containerElement={<MapElement />}
         mapElement={<MapElement />}

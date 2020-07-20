@@ -1,16 +1,42 @@
-import { useEffect } from 'react'
-import io from 'socket.io-client'
+import * as React from "react";
+// libs
+import openSocket from "socket.io-client";
+// types
+import { ICar } from "interfaces";
 
-const socket = io()
+const socket = openSocket("http://localhost:4000");
 
-export default function useSocket(eventName: string, cb: any) {
-    useEffect(() => {
-        socket.on(eventName, cb)
+export default function useSocket() {
+  const [cars, setCars] = React.useState<ICar[]>([]);
+  const [isLoadedInitialCars, setLoading] = React.useState<boolean>(false);
 
-        return function useSocketCleanup() {
-            socket.off(eventName, cb)
-        }
-    }, [eventName, cb])
+  React.useEffect(() => {
+    loadOrUpdateCars();
+  }, [isLoadedInitialCars]);
 
-    return socket
+  const findIndexAndUpdate = (newData: ICar) => {
+    const newElementIndex = cars.findIndex((car) => car.id === newData.id);
+    const newCars = [...cars];
+    newCars[newElementIndex] = {
+      ...newCars[newElementIndex],
+      lat: newData.lat,
+      lng: newData.lng,
+    };
+    setCars(newCars);
+  }
+
+  function loadOrUpdateCars() {
+    if (!isLoadedInitialCars) {
+      socket.on("cars", (data: ICar[]) => {
+        setCars(data);
+        setLoading(true);
+      })
+    } else {
+      socket.on("carPositionUpdated", (newData: ICar) => {
+        findIndexAndUpdate(newData)
+      });
+    }
+  }
+
+  return { cars };
 }

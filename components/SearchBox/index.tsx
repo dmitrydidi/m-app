@@ -2,10 +2,17 @@ import * as React from "react";
 // views
 import { TextField, Wrapper } from "./views";
 
-const SearchBox: React.FC = () => {
+interface IIncomingProps {
+  onChange: (value: string) => void;
+}
+const SearchBox: React.FC<IIncomingProps> = ({ onChange }) => {
   return (
     <Wrapper>
-      <TextField type="text" placeholder="Filter Cars By Name" />
+      <TextField
+        type="text"
+        onChange={({ target: { value } }) => onChange(value)}
+        placeholder="Enter Car Name"
+      />
     </Wrapper>
   );
 };
