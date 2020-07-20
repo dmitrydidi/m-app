@@ -21,6 +21,7 @@ const Dashboard: React.FC = () => {
   const markers = isEmpty(inputValue)
     ? cars.map((car) => (
         <Marker
+            key={car.id}
           options={{
             position: { lat: car.lat, lng: car.lng },
             label: { text: car.name, color: "white", fontSize: "10px" },
@@ -31,6 +32,7 @@ const Dashboard: React.FC = () => {
         .filter((car) => car.name === inputValue)
         .map((car) => (
           <Marker
+              key={car.id}
             options={{
               position: { lat: car.lat, lng: car.lng },
               label: { text: car.name, color: "white", fontSize: "10px" },
