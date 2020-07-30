@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
         />
       ))
     : cars
-        .filter((car) => car.name === inputValue)
+        .filter((car) => car.name.includes(inputValue))
         .map((car) => (
           <Marker
             key={car.id}
