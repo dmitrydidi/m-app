@@ -18,18 +18,14 @@ const Dashboard: React.FC = () => {
   const debouncedFilterChange = debounce(onFilterChange, 900);
 
   const markers = isEmpty(inputValue)
-    ? cars.map((car) => (
-        <Marker
-          key={car.id}
-          options={{
-            position: { lat: car.lat, lng: car.lng },
-            label: { text: car.name, color: "white", fontSize: "10px" },
-          }}
-        />
-      ))
-    : cars
-        .filter((car) => car.name.includes(inputValue))
-        .map((car) => (
+    ? cars
+    : cars.filter((car) => car.name.includes(inputValue));
+
+  return (
+    <Container>
+      <SearchBox onChange={debouncedFilterChange} />
+      <Map>
+        {markers.map((car) => (
           <Marker
             key={car.id}
             options={{
@@ -37,12 +33,8 @@ const Dashboard: React.FC = () => {
               label: { text: car.name, color: "white", fontSize: "10px" },
             }}
           />
-        ));
-
-  return (
-    <Container>
-      <SearchBox onChange={debouncedFilterChange} />
-      <Map>{markers}</Map>
+        ))}
+      </Map>
     </Container>
   );
 };
